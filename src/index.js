@@ -5,7 +5,7 @@ for (let i = 0; i < navlink.length; i++) {
         for (let i = 0; i < navlink.length; i++) {
             navlink[i].classList.remove('active');    
         }
-        navlink[i];
+        navlink[i].classList.add('active');
         //this.classList.add('active');
     });
 }
