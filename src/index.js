@@ -22,7 +22,7 @@ let getLs = ()=>{
 }
 let clearLs = ()=>{
     store =[];
-    localStorage.removeItem("localstore");
+    localStorage.removeItem("itemLocal");
 }
 
 
