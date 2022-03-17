@@ -28,7 +28,7 @@ let clearLs = () => {
 
 
 let listitem = document.querySelector('.list-group');
-let iconGet = document.querySelectorAll(".icon-get");
+let iconGet;
 
 
 
@@ -50,14 +50,37 @@ let setitem = (item) => {
         listitem.insertAdjacentHTML("beforeend", litag)
     }
     iconGet = document.querySelectorAll(".icon-get");
+    let iconCheck = document.querySelectorAll(".bi-bookmark-check");
+    console.log("icon", iconCheck);
+    item.forEach((element,index) => {
+        if(element.isDone){
+            iconCheck[index].classList.remove("bi-bookmark-check");
+            iconCheck[index].classList.add("bi-bookmark-check-fill");
+        }
+    });
     for (let i of iconGet) {
+        
         i.addEventListener('click', (e) => {
             e.preventDefault();
-            //console.log(i)
-            i.classList.remove("bi-bookmark-check");
-            i.classList.add("bi-bookmark-check-fill");
-            let Checked = i.parentElement.parentElement.parentElement
-
+            let Checked = i.parentElement.parentElement.parentElement;
+            let thisEle;
+            for (let j of item) {
+                if (j.time == Checked.dataset.time) {
+                    thisEle=j;
+                }
+            }
+            if (!thisEle.isDone) {
+                i.classList.remove("bi-bookmark-check");
+                i.classList.add("bi-bookmark-check-fill");
+                thisEle.isDone = !thisEle.isDone;
+            }
+            else if(thisEle.isDone){
+                i.classList.remove("bi-bookmark-check-fill");
+                i.classList.add("bi-bookmark-check");
+                thisEle.isDone = !thisEle.isDone;
+            }
+             
+            setLS(item);
         });
     }
 
@@ -73,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         store = (getLs() == null) ? [] : getLs();
         e.preventDefault();
         let inputText = document.getElementById('inputText').value.trim()
+        document.getElementById('inputText').value = "";
         if (inputText.length == 0) {
             alert('Please input task');
         } else {
