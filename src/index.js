@@ -9,7 +9,7 @@ for (let i = 0; i < navlink.length; i++) {
         //this.classList.add('active');
     });
 }
-
+let states =[false,'edit','delete'];
 let store = [];
 let setLS = (item) => {
     if (item.length > 0)
@@ -18,7 +18,7 @@ let setLS = (item) => {
 }
 
 let getLs = () => {
-    return JSON.parse(localStorage.getItem("item-all"));
+    return (JSON.parse( localStorage.getItem("item-all")  ) == null )? [] : JSON.parse( localStorage.getItem("item-all")) 
 }
 let clearLs = () => {
     store = [];
@@ -39,7 +39,7 @@ let setitem = (item) => {
     for (let val in item) {
         console.log("Name:", item[val].name);
 
-        let litag = `<li class="list-group-item d-flex justify-content-between align-items-center task-item" data-time="${item[val].time}">
+        let litag = `<li class="list-group-item d-flex justify-content-between align-items-center task-item" data-time="${item[val].time}" data-state="${item[val].state}">
         <span class="task">${item[val].name}</span>
         <span class="task-item">
         <a href="javascript:void(0)" data-check><i class="icon-get icon-green bi bi-bookmark-check"></i></a>
@@ -49,16 +49,14 @@ let setitem = (item) => {
         </li>`
         listitem.insertAdjacentHTML("beforeend", litag)
     }
-    iconGet = document.querySelectorAll(".icon-get");
     let iconCheck = document.querySelectorAll(".bi-bookmark-check");
-    console.log("icon", iconCheck);
     item.forEach((element,index) => {
-        if(element.isDone){
+        if(element.state){
             iconCheck[index].classList.remove("bi-bookmark-check");
             iconCheck[index].classList.add("bi-bookmark-check-fill");
         }
     });
-    for (let i of iconGet) {
+    for (let i of iconCheck) {
         
         i.addEventListener('click', (e) => {
             e.preventDefault();
@@ -69,15 +67,15 @@ let setitem = (item) => {
                     thisEle=j;
                 }
             }
-            if (!thisEle.isDone) {
+            if (!thisEle.state) {
                 i.classList.remove("bi-bookmark-check");
                 i.classList.add("bi-bookmark-check-fill");
-                thisEle.isDone = !thisEle.isDone;
+                thisEle.state = !thisEle.state;
             }
-            else if(thisEle.isDone){
+            else if(thisEle.state){
                 i.classList.remove("bi-bookmark-check-fill");
                 i.classList.add("bi-bookmark-check");
-                thisEle.isDone = !thisEle.isDone;
+                thisEle.state = !thisEle.state;
             }
              
             setLS(item);
@@ -102,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const item = {
                 name: inputText,
-                isDone: false,
+                state: states[0],
                 time: new Date().getTime()
             }
             store.push(item);
