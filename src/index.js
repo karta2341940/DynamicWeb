@@ -1,15 +1,6 @@
-let navlink = document.getElementsByClassName('nav-link');
-console.log("navlink.length:", navlink.length);
-for (let i = 0; i < navlink.length; i++) {
-    navlink[i].addEventListener('click', (e) => {
-        for (let i = 0; i < navlink.length; i++) {
-            navlink[i].classList.remove('active');
-        }
-        navlink[i].classList.add('active');
-        //this.classList.add('active');
-    });
-}
-let states =[false,'edit','delete'];
+let states = [false, 'edit', 'delete'];
+let tabStates = document.querySelector('.nav-link.active').parentNode.dataset.type;
+
 let store = [];
 let setLS = (item) => {
     if (item.length > 0)
@@ -18,7 +9,15 @@ let setLS = (item) => {
 }
 
 let getLs = () => {
-    return (JSON.parse( localStorage.getItem("item-all")  ) == null )? [] : JSON.parse( localStorage.getItem("item-all")) 
+    let rtn = (JSON.parse(localStorage.getItem("item-all")) == null) ? [] : JSON.parse(localStorage.getItem("item-all"));
+    rtn = rtn.sort((a, b) => {
+        //<0 => ba
+        //>0 => ab
+        return a.time - b.time;
+    });
+    for (let i of rtn)
+        console.log("i", i);
+    return rtn;
 }
 let clearLs = () => {
     store = [];
@@ -28,43 +27,39 @@ let clearLs = () => {
 
 
 let listitem = document.querySelector('.list-group');
-let iconGet;
-
 
 
 let setitem = (item) => {
     listitem.innerHTML = "";
-    console.log("item", item);
+    //console.log("item", item);
 
-    for (let val in item) {
-        console.log("Name:", item[val].name);
+    let litag = "";
 
-        let litag = `<li class="list-group-item d-flex justify-content-between align-items-center task-item" data-time="${item[val].time}" data-state="${item[val].state}">
-        <span class="task">${item[val].name}</span>
+
+    //render item
+    for (let val of item) {
+        litag = `<li class="list-group-item d-flex justify-content-between align-items-center task-item" data-time="${val.time}" data-state="${val.state}">
+        <span class="task">${val.name}</span>
         <span class="task-item">
-        <a href="javascript:void(0)" data-check><i class="icon-get icon-green bi bi-bookmark-check"></i></a>
-        <a href="javascript:void(0)" data-edit><i class="icon-get icon-gray bi bi-pen"></i></a>
-        <a href="javascript:void(0)" data-delete><i class="icon-get icon-red bi bi-file-x"></i></a>
+        <a href="javascript:void(0)" data-action = "check"><i class="icon-get icon-green bi bi-bookmark-check"></i></a>
+        <a href="javascript:void(0)" data-action = "edit"><i class="icon-get icon-gray bi bi-pen"></i></a>
+        <a href="javascript:void(0)" data-action = "delete"><i class="icon-get icon-red bi bi-file-x"></i></a>
         </span>
-        </li>`
+        </li>`;
         listitem.insertAdjacentHTML("beforeend", litag)
     }
+
     let iconCheck = document.querySelectorAll(".bi-bookmark-check");
-    item.forEach((element,index) => {
-        if(element.state){
-            iconCheck[index].classList.remove("bi-bookmark-check");
-            iconCheck[index].classList.add("bi-bookmark-check-fill");
-        }
-    });
+    //register icon click event
     for (let i of iconCheck) {
-        
+
         i.addEventListener('click', (e) => {
             e.preventDefault();
             let Checked = i.parentElement.parentElement.parentElement;
             let thisEle;
             for (let j of item) {
                 if (j.time == Checked.dataset.time) {
-                    thisEle=j;
+                    thisEle = j;
                 }
             }
             if (!thisEle.state) {
@@ -72,23 +67,51 @@ let setitem = (item) => {
                 i.classList.add("bi-bookmark-check-fill");
                 thisEle.state = !thisEle.state;
             }
-            else if(thisEle.state){
+            else if (thisEle.state) {
                 i.classList.remove("bi-bookmark-check-fill");
                 i.classList.add("bi-bookmark-check");
                 thisEle.state = !thisEle.state;
             }
-             
             setLS(item);
         });
     }
 
+    item.forEach((element, index) => {
+        if (element.state) {
+            iconCheck[index].classList.remove("bi-bookmark-check");
+            iconCheck[index].classList.add("bi-bookmark-check-fill");
+        }
+    });
+
+
+    setLS(item);
+
 }
 
+
 let form = document.getElementsByTagName('form')[0];
+let navlink = document.getElementsByClassName('nav-link');
 
 document.addEventListener('DOMContentLoaded', () => {
-
     setitem(getLs());
+
+    //註冊tab的點擊事件
+    for (let i of navlink) {
+
+        i.addEventListener('click', (e) => {
+
+            for (let j = 0; j < navlink.length; j++) {
+                navlink[j].classList.remove('active');
+            }
+            tabStates = i.parentNode.dataset.type;
+
+
+            i.classList.add('active');
+            setitem(getLs())
+        });
+
+    }
+    //register add submit event
     form.addEventListener('submit', (e) => {
 
         store = (getLs() == null) ? [] : getLs();
@@ -98,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (inputText.length == 0) {
             alert('Please input task');
         } else {
+
             const item = {
                 name: inputText,
                 state: states[0],
@@ -107,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setLS(store);
         }
         setitem(getLs());
-        console.log(getLs());
     });
+    //console.log(getLs());
+
 });

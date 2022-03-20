@@ -1,0 +1,17 @@
+0.  請Export 你完成的codepen資料夾, 並修改在disc下的Index.html 內的 , 將完成後的disc資料夾壓縮,存成姓名.zip 上傳 
+
+1.  請完成老師上課教授的 To Do List Project (所有功能皆具備) (30%)
+
+2.  Deleted 功能進階 
+
+2.1 請新增一個 Deleted 的Tab 按鈕選項(換言之原本只有, All, To Do, 
+    Completed. 改為 All, To Do, Completed, Deleted. (10%) 
+
+2.2 對於使用者在 All, To Do, Completed 中選取 deleted 圖示時(deleted 的圖示 為 fill 的) 
+    出現提示訊息(確認/取消),提醒使用者確定要刪除該task? (10%) 
+
+2.3 使用者若確認刪除, 則 Deleted 的任務中會出現該 task(20%) 
+
+2.4 使用者點選取消,則回到原來畫面 (10%) 
+
+2.5 當使用者在 deleted 中將圖示由 fill 改為原來為選取的圖示時,則該任務回到刪除前的狀態(20%)

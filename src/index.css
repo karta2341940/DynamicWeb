@@ -4,6 +4,7 @@
 
 .icon-green {
     color: green;
+
 }
 
 .icon-gray {
@@ -13,3 +14,86 @@
 .icon-red {
     color: red;
 }
+
+
+.icon-get:hover {
+    cursor: pointer;
+    opacity: 0.5;
+
+}
+
+
+.check-box {
+    content: "";
+    display: flex;
+    position: absolute;
+    width: 0px;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    right: 0px;
+    z-index: 50;
+    overflow: hidden;
+    transition: 200ms width linear;
+}
+
+.check-box span {
+    color: aliceblue;
+    font-size: 0.9em;
+    width: 50%;
+    padding-top: 10px;
+}
+
+.check-box span:hover {
+    cursor: pointer;
+}
+
+.check-box .yes {
+    background-color: rgba(0, 128, 0, 0.9);
+}
+
+.check-box .no {
+    background-color: rgba(255, 0, 0, 0.9);
+}
+
+.check-box .no:hover, .check-box .yes:hover {
+    opacity: 0.7;
+}
+
+.show.check-box {
+    width: 105px;
+    transition: 200ms width linear;
+}
+
+.delete span {
+    display: none;
+}
+
+.delete.check-box {
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    transition: 400ms width linear;
+}
+
+.task-item-o {
+
+    background-color: aliceblue;
+}
+
+#alert {
+    display: flex;
+    position: relative;
+    margin-top: 30px;
+    padding: 50px;
+    height: 0px !important;
+    overflow: hidden;
+    background-color: antiquewhite;
+}
+
+
+
+.show#alert{
+    height: 100%;
+    transition: 400ms height linear;
+}
+
+
